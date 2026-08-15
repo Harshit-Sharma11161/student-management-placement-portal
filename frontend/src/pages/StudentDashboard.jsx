@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
+import Jobs from "./Jobs";
+import MyApplications from "./MyApplications";
 import "../App.css";
 
 function StudentDashboard() {
   const [user, setUser] = useState(null);
   const [student, setStudent] = useState(null);
+  const [showJobs, setShowJobs] = useState(false);
+  const [showApplications, setShowApplications] = useState(false);
 
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
@@ -23,8 +27,8 @@ function StudentDashboard() {
         "http://localhost:5000/api/students/me",
         {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
@@ -44,6 +48,14 @@ function StudentDashboard() {
 
     window.location.reload();
   };
+
+  // Show Jobs page
+  if (showJobs) {
+    return <Jobs />;
+  }
+  if (showApplications) {
+  return <MyApplications />;
+}
 
   return (
     <div className="dashboard">
@@ -119,31 +131,45 @@ function StudentDashboard() {
         <div className="dashboard-cards">
 
           <div className="dashboard-card">
+
             <h3>💼 Available Jobs</h3>
+
             <p>
               Browse jobs and find placement opportunities.
             </p>
 
-            <button className="primary-btn">
+            <button
+              className="primary-btn"
+              onClick={() => setShowJobs(true)}
+            >
               View Jobs
             </button>
+
           </div>
 
 
           <div className="dashboard-card">
+
             <h3>📄 My Applications</h3>
+
             <p>
               Track the status of your job applications.
             </p>
 
-            <button className="primary-btn">
-              View Applications
-            </button>
+           <button
+  className="primary-btn"
+  onClick={() => setShowApplications(true)}
+>
+  View Applications
+</button>
+
           </div>
 
 
           <div className="dashboard-card">
+
             <h3>👤 My Profile</h3>
+
             <p>
               View and update your student information.
             </p>
@@ -151,6 +177,7 @@ function StudentDashboard() {
             <button className="primary-btn">
               View Profile
             </button>
+
           </div>
 
         </div>
