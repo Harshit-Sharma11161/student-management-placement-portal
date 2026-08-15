@@ -1,5 +1,6 @@
 import { useState } from "react";
 import StudentDashboard from "./StudentDashboard";
+import AdminDashboard from "./AdminDashboard";
 import "../App.css";
 
 function Login() {
@@ -9,6 +10,7 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
+  const [userRole, setUserRole] = useState("");
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -44,7 +46,9 @@ function Login() {
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
+      setUserRole(data.user.role);
       setLoggedIn(true);
+
     } catch (error) {
       console.error("Login error:", error);
       setError("Unable to connect to server.");
@@ -53,22 +57,37 @@ function Login() {
     setLoading(false);
   };
 
+
+  // ================= REDIRECT AFTER LOGIN =================
+
   if (loggedIn) {
+
+    if (userRole === "admin") {
+      return <AdminDashboard />;
+    }
+
     return <StudentDashboard />;
   }
 
+
   return (
     <div className="login-page">
+
       <div className="login-card">
 
         <h1>Login</h1>
 
-        <p>Student Management & Placement Portal</p>
+        <p>
+          Student Management & Placement Portal
+        </p>
 
         <form onSubmit={handleLogin}>
 
           <div className="form-group">
-            <label htmlFor="email">Email</label>
+
+            <label htmlFor="email">
+              Email
+            </label>
 
             <input
               id="email"
@@ -78,10 +97,15 @@ function Login() {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
+
           </div>
 
+
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+
+            <label htmlFor="password">
+              Password
+            </label>
 
             <input
               id="password"
@@ -91,13 +115,16 @@ function Login() {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+
           </div>
+
 
           {error && (
             <div className="login-error">
               {error}
             </div>
           )}
+
 
           <button
             type="submit"
@@ -108,7 +135,9 @@ function Login() {
           </button>
 
         </form>
+
       </div>
+
     </div>
   );
 }
