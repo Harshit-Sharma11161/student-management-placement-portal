@@ -2,14 +2,18 @@ const express = require("express");
 const Application = require("../models/application");
 const Student = require("../models/student");
 const Job = require("../models/job");
-const { protect, adminOnly } = require("../middleware/auth");
+const {
+    protect,
+    adminOnly,
+    studentOnly
+} = require("../middleware/auth");
 
 const router = express.Router();
 
 
 // ================= STUDENT APPLY FOR JOB =================
 
-router.post("/", protect, async (req, res) => {
+router.post("/", protect, studentOnly, async (req, res) => {
     try {
         // Find the logged-in student's profile
         const student = await Student.findOne({
@@ -87,7 +91,7 @@ router.post("/", protect, async (req, res) => {
 
 // ================= STUDENT VIEW OWN APPLICATIONS =================
 
-router.get("/my", protect, async (req, res) => {
+router.get("/my", protect, studentOnly, async (req, res) => {
     try {
         const student = await Student.findOne({
             user: req.user.id

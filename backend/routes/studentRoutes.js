@@ -1,11 +1,11 @@
 const express = require("express");
 const Student = require("../models/student");
-const { protect: auth } = require("../middleware/auth");
+const { protect: auth, studentOnly } = require("../middleware/auth");
 
 const router = express.Router();
 
 // CREATE student profile
-router.post("/", auth, async (req, res) => {
+router.post("/", auth, studentOnly, async (req, res) => {
     try {
         const {
             rollNumber,
@@ -55,7 +55,7 @@ router.post("/", auth, async (req, res) => {
 
 
 // GET logged-in student's profile
-router.get("/me", auth, async (req, res) => {
+router.get("/me", auth, studentOnly, async (req, res) => {
     try {
         const student = await Student.findOne({
             user: req.user.id
@@ -79,7 +79,7 @@ router.get("/me", auth, async (req, res) => {
 
 
 // UPDATE logged-in student's profile
-router.put("/me", auth, async (req, res) => {
+router.put("/me", auth, studentOnly, async (req, res) => {
     try {
         const student = await Student.findOne({
             user: req.user.id
@@ -131,7 +131,7 @@ router.put("/me", auth, async (req, res) => {
 
 
 // DELETE logged-in student's profile
-router.delete("/me", auth, async (req, res) => {
+router.delete("/me", auth, studentOnly, async (req, res) => {
     try {
         const student = await Student.findOne({
             user: req.user.id
