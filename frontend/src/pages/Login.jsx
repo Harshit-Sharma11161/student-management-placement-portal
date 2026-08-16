@@ -1,6 +1,4 @@
 import { useState } from "react";
-import StudentDashboard from "./StudentDashboard";
-import AdminDashboard from "./AdminDashboard";
 import "../App.css";
 
 function Login() {
@@ -9,8 +7,6 @@ function Login() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [userRole, setUserRole] = useState("");
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -23,9 +19,11 @@ function Login() {
         "http://localhost:5000/api/auth/login",
         {
           method: "POST",
+
           headers: {
             "Content-Type": "application/json",
           },
+
           body: JSON.stringify({
             email,
             password,
@@ -38,36 +36,41 @@ function Login() {
       console.log("Login response:", data);
 
       if (!response.ok) {
-        setError(data.message || "Login failed.");
+        setError(
+          data.message || "Login failed."
+        );
+
         setLoading(false);
         return;
       }
 
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      // Save authentication information
+      localStorage.setItem(
+        "token",
+        data.token
+      );
 
-      setUserRole(data.user.role);
-      setLoggedIn(true);
+      localStorage.setItem(
+        "user",
+        JSON.stringify(data.user)
+      );
+
+      // Reload App so it reads the new login state
+      window.location.reload();
 
     } catch (error) {
-      console.error("Login error:", error);
-      setError("Unable to connect to server.");
+      console.error(
+        "Login error:",
+        error
+      );
+
+      setError(
+        "Unable to connect to server."
+      );
     }
 
     setLoading(false);
   };
-
-
-  // ================= REDIRECT AFTER LOGIN =================
-
-  if (loggedIn) {
-
-    if (userRole === "admin") {
-      return <AdminDashboard />;
-    }
-
-    return <StudentDashboard />;
-  }
 
 
   return (
@@ -75,13 +78,18 @@ function Login() {
 
       <div className="login-card">
 
-        <h1>Login</h1>
+        <h1>
+          Login
+        </h1>
 
         <p>
           Student Management & Placement Portal
         </p>
 
+
         <form onSubmit={handleLogin}>
+
+          {/* EMAIL */}
 
           <div className="form-group">
 
@@ -94,12 +102,16 @@ function Login() {
               type="email"
               placeholder="Enter your email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) =>
+                setEmail(e.target.value)
+              }
               required
             />
 
           </div>
 
+
+          {/* PASSWORD */}
 
           <div className="form-group">
 
@@ -112,12 +124,16 @@ function Login() {
               type="password"
               placeholder="Enter your password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) =>
+                setPassword(e.target.value)
+              }
               required
             />
 
           </div>
 
+
+          {/* ERROR */}
 
           {error && (
             <div className="login-error">
@@ -126,12 +142,16 @@ function Login() {
           )}
 
 
+          {/* LOGIN BUTTON */}
+
           <button
             type="submit"
             className="primary-btn login-btn"
             disabled={loading}
           >
-            {loading ? "Logging in..." : "Login"}
+            {loading
+              ? "Logging in..."
+              : "Login"}
           </button>
 
         </form>

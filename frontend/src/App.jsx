@@ -1,13 +1,74 @@
 import { useState } from "react";
+
 import Login from "./pages/Login";
+import Register from "./pages/Register";
+import StudentDashboard from "./pages/StudentDashboard";
+import AdminDashboard from "./pages/AdminDashboard";
+
 import "./App.css";
 
 function App() {
   const [showLogin, setShowLogin] = useState(false);
+  const [showRegister, setShowRegister] =
+    useState(false);
+
+  // ================= GET LOGGED IN USER =================
+
+  const token = localStorage.getItem("token");
+
+  const savedUser = localStorage.getItem("user");
+
+  let user = null;
+
+  try {
+    if (savedUser) {
+      user = JSON.parse(savedUser);
+    }
+  } catch (error) {
+    console.error(
+      "Invalid user data:",
+      error
+    );
+
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+  }
+
+  // ================= LOGGED IN =================
+
+  if (token && user) {
+    if (user.role === "admin") {
+      return <AdminDashboard />;
+    }
+
+    if (user.role === "student") {
+      return <StudentDashboard />;
+    }
+
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+  }
+
+  // ================= REGISTER =================
+
+  if (showRegister) {
+    return (
+      <Register
+        onBackToLogin={() => {
+          setShowRegister(false);
+          setShowLogin(true);
+        }}
+      />
+    );
+  }
+
+  // ================= LOGIN =================
 
   if (showLogin) {
     return <Login />;
   }
+
+  // ================= LANDING PAGE =================
 
   return (
     <div className="app">
@@ -22,12 +83,21 @@ function App() {
 
           <button
             className="secondary-btn"
-            onClick={() => setShowLogin(true)}
+            onClick={() => {
+              setShowLogin(true);
+              setShowRegister(false);
+            }}
           >
             Login
           </button>
 
-          <button className="primary-btn">
+          <button
+            className="primary-btn"
+            onClick={() => {
+              setShowRegister(true);
+              setShowLogin(false);
+            }}
+          >
             Register
           </button>
 
@@ -41,12 +111,15 @@ function App() {
         <div className="hero-content">
 
           <h1>
-            Student Management & Placement Portal
+            Student Management &
+            Placement Portal
           </h1>
 
           <p>
-            A centralized platform for students and administrators
-            to manage student profiles, job opportunities and
+            A centralized platform for
+            students and administrators
+            to manage student profiles,
+            job opportunities and
             placement applications.
           </p>
 
@@ -54,14 +127,18 @@ function App() {
 
             <button
               className="primary-btn"
-              onClick={() => setShowLogin(true)}
+              onClick={() =>
+                setShowLogin(true)
+              }
             >
               Student Login
             </button>
 
             <button
               className="secondary-btn"
-              onClick={() => setShowLogin(true)}
+              onClick={() =>
+                setShowLogin(true)
+              }
             >
               Admin Login
             </button>
@@ -82,8 +159,8 @@ function App() {
           </h3>
 
           <p>
-            Manage academic information, skills,
-            resumes and projects.
+            Manage academic information,
+            skills, resumes and projects.
           </p>
 
         </div>
@@ -96,8 +173,9 @@ function App() {
           </h3>
 
           <p>
-            Browse available placement opportunities
-            and eligibility requirements.
+            Browse available placement
+            opportunities and eligibility
+            requirements.
           </p>
 
         </div>
