@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import Jobs from "./Jobs";
 import MyApplications from "./MyApplications";
+import StudentProfile from "./StudentProfile";
 import "../App.css";
 
 function StudentDashboard() {
   const [user, setUser] = useState(null);
   const [student, setStudent] = useState(null);
+
   const [showJobs, setShowJobs] = useState(false);
   const [showApplications, setShowApplications] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
 
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
@@ -18,6 +21,8 @@ function StudentDashboard() {
 
     fetchStudentProfile();
   }, []);
+
+  // ================= GET STUDENT PROFILE =================
 
   const fetchStudentProfile = async () => {
     try {
@@ -38,9 +43,14 @@ function StudentDashboard() {
         setStudent(data);
       }
     } catch (error) {
-      console.error("Failed to fetch student profile:", error);
+      console.error(
+        "Failed to fetch student profile:",
+        error
+      );
     }
   };
+
+  // ================= LOGOUT =================
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -49,20 +59,39 @@ function StudentDashboard() {
     window.location.reload();
   };
 
-  // Show Jobs page
+  // ================= PAGE NAVIGATION =================
+
   if (showJobs) {
     return <Jobs />;
   }
+
   if (showApplications) {
-  return <MyApplications />;
-}
+    return <MyApplications />;
+  }
+
+  if (showProfile) {
+    return (
+      <StudentProfile
+        onBack={() => {
+          setShowProfile(false);
+          fetchStudentProfile();
+        }}
+      />
+    );
+  }
+
+  // ================= DASHBOARD =================
 
   return (
     <div className="dashboard">
 
+      {/* ================= NAVBAR ================= */}
+
       <nav className="dashboard-navbar">
 
-        <h2>Student Placement Portal</h2>
+        <h2>
+          Student Placement Portal
+        </h2>
 
         <button
           className="logout-btn"
@@ -74,6 +103,8 @@ function StudentDashboard() {
       </nav>
 
 
+      {/* ================= MAIN CONTENT ================= */}
+
       <main className="dashboard-content">
 
         <h1>
@@ -81,45 +112,87 @@ function StudentDashboard() {
         </h1>
 
         <p className="dashboard-subtitle">
-          Manage your profile, explore jobs and track your applications.
+          Manage your profile, explore jobs
+          and track your applications.
         </p>
 
 
+        {/* ================= PROFILE SUMMARY ================= */}
+
         {student && (
+
           <div className="profile-card">
 
-            <h2>My Profile</h2>
+            <h2>
+              My Profile
+            </h2>
 
             <div className="profile-grid">
 
               <div>
-                <strong>Roll Number</strong>
-                <span>{student.rollNumber}</span>
+                <strong>
+                  Roll Number
+                </strong>
+
+                <span>
+                  {student.rollNumber || "Not added"}
+                </span>
               </div>
 
-              <div>
-                <strong>Branch</strong>
-                <span>{student.branch}</span>
-              </div>
 
               <div>
-                <strong>Year</strong>
-                <span>{student.year}</span>
+                <strong>
+                  Branch
+                </strong>
+
+                <span>
+                  {student.branch || "Not added"}
+                </span>
               </div>
 
-              <div>
-                <strong>CGPA</strong>
-                <span>{student.cgpa}</span>
-              </div>
 
               <div>
-                <strong>Phone</strong>
-                <span>{student.phone}</span>
+                <strong>
+                  Year
+                </strong>
+
+                <span>
+                  {student.year || "Not added"}
+                </span>
               </div>
 
+
               <div>
-                <strong>Placement Status</strong>
-                <span>{student.placementStatus}</span>
+                <strong>
+                  CGPA
+                </strong>
+
+                <span>
+                  {student.cgpa || "Not added"}
+                </span>
+              </div>
+
+
+              <div>
+                <strong>
+                  Phone
+                </strong>
+
+                <span>
+                  {student.phone || "Not added"}
+                </span>
+              </div>
+
+
+              <div>
+                <strong>
+                  Placement Status
+                </strong>
+
+                <span>
+                  {student.placementStatus ||
+                    "Not Placed"}
+                </span>
               </div>
 
             </div>
@@ -128,19 +201,31 @@ function StudentDashboard() {
         )}
 
 
+        {/* ================= DASHBOARD CARDS ================= */}
+
         <div className="dashboard-cards">
+
+
+          {/* JOBS */}
 
           <div className="dashboard-card">
 
-            <h3>💼 Available Jobs</h3>
+            <h3>
+              💼 Available Jobs
+            </h3>
 
             <p>
-              Browse jobs and find placement opportunities.
+              Browse jobs and find placement
+              opportunities.
             </p>
 
             <button
               className="primary-btn"
-              onClick={() => setShowJobs(true)}
+              onClick={() => {
+                setShowJobs(true);
+                setShowApplications(false);
+                setShowProfile(false);
+              }}
             >
               View Jobs
             </button>
@@ -148,33 +233,54 @@ function StudentDashboard() {
           </div>
 
 
+          {/* APPLICATIONS */}
+
           <div className="dashboard-card">
 
-            <h3>📄 My Applications</h3>
+            <h3>
+              📄 My Applications
+            </h3>
 
             <p>
-              Track the status of your job applications.
+              Track the status of your job
+              applications.
             </p>
 
-           <button
-  className="primary-btn"
-  onClick={() => setShowApplications(true)}
->
-  View Applications
-</button>
+            <button
+              className="primary-btn"
+              onClick={() => {
+                setShowApplications(true);
+                setShowJobs(false);
+                setShowProfile(false);
+              }}
+            >
+              View Applications
+            </button>
 
           </div>
 
 
+          {/* PROFILE */}
+
           <div className="dashboard-card">
 
-            <h3>👤 My Profile</h3>
+            <h3>
+              👤 My Profile
+            </h3>
 
             <p>
-              View and update your student information.
+              View and update your student
+              information.
             </p>
 
-            <button className="primary-btn">
+            <button
+              className="primary-btn"
+              onClick={() => {
+                setShowProfile(true);
+                setShowJobs(false);
+                setShowApplications(false);
+              }}
+            >
               View Profile
             </button>
 
