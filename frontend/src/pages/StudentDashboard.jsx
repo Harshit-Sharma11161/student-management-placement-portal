@@ -12,6 +12,9 @@ function StudentDashboard() {
   const [showApplications, setShowApplications] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
 
+
+  // ================= LOAD USER =================
+
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
 
@@ -21,6 +24,7 @@ function StudentDashboard() {
 
     fetchStudentProfile();
   }, []);
+
 
   // ================= GET STUDENT PROFILE =================
 
@@ -42,6 +46,7 @@ function StudentDashboard() {
       if (response.ok) {
         setStudent(data);
       }
+
     } catch (error) {
       console.error(
         "Failed to fetch student profile:",
@@ -49,6 +54,7 @@ function StudentDashboard() {
       );
     }
   };
+
 
   // ================= LOGOUT =================
 
@@ -59,15 +65,36 @@ function StudentDashboard() {
     window.location.reload();
   };
 
+
   // ================= PAGE NAVIGATION =================
 
+  // ---------- JOBS ----------
+
   if (showJobs) {
-    return <Jobs />;
+    return (
+      <Jobs
+        onBack={() => {
+          setShowJobs(false);
+        }}
+      />
+    );
   }
 
+
+  // ---------- APPLICATIONS ----------
+
   if (showApplications) {
-    return <MyApplications />;
+    return (
+      <MyApplications
+        onBack={() => {
+          setShowApplications(false);
+        }}
+      />
+    );
   }
+
+
+  // ---------- PROFILE ----------
 
   if (showProfile) {
     return (
@@ -80,10 +107,12 @@ function StudentDashboard() {
     );
   }
 
+
   // ================= DASHBOARD =================
 
   return (
     <div className="dashboard">
+
 
       {/* ================= NAVBAR ================= */}
 
@@ -129,7 +158,9 @@ function StudentDashboard() {
 
             <div className="profile-grid">
 
+
               <div>
+
                 <strong>
                   Roll Number
                 </strong>
@@ -137,10 +168,12 @@ function StudentDashboard() {
                 <span>
                   {student.rollNumber || "Not added"}
                 </span>
+
               </div>
 
 
               <div>
+
                 <strong>
                   Branch
                 </strong>
@@ -148,10 +181,12 @@ function StudentDashboard() {
                 <span>
                   {student.branch || "Not added"}
                 </span>
+
               </div>
 
 
               <div>
+
                 <strong>
                   Year
                 </strong>
@@ -159,10 +194,12 @@ function StudentDashboard() {
                 <span>
                   {student.year || "Not added"}
                 </span>
+
               </div>
 
 
               <div>
+
                 <strong>
                   CGPA
                 </strong>
@@ -170,10 +207,12 @@ function StudentDashboard() {
                 <span>
                   {student.cgpa || "Not added"}
                 </span>
+
               </div>
 
 
               <div>
+
                 <strong>
                   Phone
                 </strong>
@@ -181,10 +220,12 @@ function StudentDashboard() {
                 <span>
                   {student.phone || "Not added"}
                 </span>
+
               </div>
 
 
               <div>
+
                 <strong>
                   Placement Status
                 </strong>
@@ -193,11 +234,14 @@ function StudentDashboard() {
                   {student.placementStatus ||
                     "Not Placed"}
                 </span>
+
               </div>
+
 
             </div>
 
           </div>
+
         )}
 
 
@@ -206,7 +250,7 @@ function StudentDashboard() {
         <div className="dashboard-cards">
 
 
-          {/* JOBS */}
+          {/* ================= JOBS ================= */}
 
           <div className="dashboard-card">
 
@@ -222,9 +266,13 @@ function StudentDashboard() {
             <button
               className="primary-btn"
               onClick={() => {
+
                 setShowJobs(true);
+
                 setShowApplications(false);
+
                 setShowProfile(false);
+
               }}
             >
               View Jobs
@@ -233,7 +281,7 @@ function StudentDashboard() {
           </div>
 
 
-          {/* APPLICATIONS */}
+          {/* ================= APPLICATIONS ================= */}
 
           <div className="dashboard-card">
 
@@ -249,9 +297,13 @@ function StudentDashboard() {
             <button
               className="primary-btn"
               onClick={() => {
+
                 setShowApplications(true);
+
                 setShowJobs(false);
+
                 setShowProfile(false);
+
               }}
             >
               View Applications
@@ -260,7 +312,7 @@ function StudentDashboard() {
           </div>
 
 
-          {/* PROFILE */}
+          {/* ================= PROFILE ================= */}
 
           <div className="dashboard-card">
 
@@ -276,15 +328,20 @@ function StudentDashboard() {
             <button
               className="primary-btn"
               onClick={() => {
+
                 setShowProfile(true);
+
                 setShowJobs(false);
+
                 setShowApplications(false);
+
               }}
             >
               View Profile
             </button>
 
           </div>
+
 
         </div>
 

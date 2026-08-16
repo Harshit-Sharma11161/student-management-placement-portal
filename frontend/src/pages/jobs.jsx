@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "../App.css";
 
-function Jobs() {
+function Jobs({ onBack }) {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -29,12 +29,15 @@ function Jobs() {
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.message || "Unable to load jobs.");
+        setError(
+          data.message || "Unable to load jobs."
+        );
         setLoading(false);
         return;
       }
 
       setJobs(data);
+
     } catch (error) {
       console.error("Jobs error:", error);
       setError("Unable to connect to server.");
@@ -68,18 +71,32 @@ function Jobs() {
 
       const data = await response.json();
 
-      console.log("Application response:", data);
+      console.log(
+        "Application response:",
+        data
+      );
 
       if (!response.ok) {
-        alert(data.message || "Unable to apply for this job.");
+        alert(
+          data.message ||
+          "Unable to apply for this job."
+        );
         return;
       }
 
-      alert("Application submitted successfully!");
+      alert(
+        "Application submitted successfully!"
+      );
 
     } catch (error) {
-      console.error("Application error:", error);
-      alert("Unable to connect to server.");
+      console.error(
+        "Application error:",
+        error
+      );
+
+      alert(
+        "Unable to connect to server."
+      );
     }
   };
 
@@ -89,7 +106,27 @@ function Jobs() {
   if (loading) {
     return (
       <div className="jobs-page">
-        <h2>Loading jobs...</h2>
+
+        <button
+          type="button"
+          className="secondary-btn"
+          onClick={onBack}
+          style={{
+            display: "block",
+            marginBottom: "20px",
+          }}
+        >
+          ← Back to Dashboard
+        </button>
+
+        <div className="jobs-header">
+
+          <h2>
+            Loading jobs...
+          </h2>
+
+        </div>
+
       </div>
     );
   }
@@ -100,18 +137,38 @@ function Jobs() {
   return (
     <div className="jobs-page">
 
+      {/* ================= BACK BUTTON ================= */}
+
+      <button
+        type="button"
+        className="secondary-btn"
+        onClick={onBack}
+        style={{
+          display: "block",
+          marginBottom: "20px",
+        }}
+      >
+        ← Back to Dashboard
+      </button>
+
+
+      {/* ================= HEADER ================= */}
+
       <div className="jobs-header">
 
-        <h1>Available Jobs</h1>
+        <h1>
+          Available Jobs
+        </h1>
 
         <p>
-          Explore placement opportunities available for you.
+          Explore placement opportunities
+          available for you.
         </p>
 
       </div>
 
 
-      {/* ERROR */}
+      {/* ================= ERROR ================= */}
 
       {error && (
         <div className="login-error">
@@ -120,22 +177,25 @@ function Jobs() {
       )}
 
 
-      {/* NO JOBS */}
+      {/* ================= NO JOBS ================= */}
 
       {!error && jobs.length === 0 && (
         <div className="no-jobs">
 
-          <h2>No jobs available</h2>
+          <h2>
+            No jobs available
+          </h2>
 
           <p>
-            There are currently no open job opportunities.
+            There are currently no open
+            job opportunities.
           </p>
 
         </div>
       )}
 
 
-      {/* JOBS */}
+      {/* ================= JOBS ================= */}
 
       <div className="jobs-grid">
 
@@ -161,7 +221,6 @@ function Jobs() {
                 </h3>
 
               </div>
-
 
               <span className="job-status">
                 {job.status}
@@ -232,7 +291,6 @@ function Jobs() {
                 Required Skills
               </strong>
 
-
               <div className="skills-list">
 
                 {job.skillsRequired?.map(
@@ -261,12 +319,10 @@ function Jobs() {
                 Eligibility
               </strong>
 
-
               <p>
                 Minimum CGPA:{" "}
                 {job.eligibility?.minCGPA || 0}
               </p>
-
 
               <p>
                 Branches:{" "}
@@ -274,7 +330,6 @@ function Jobs() {
                   ? job.eligibility.branches.join(", ")
                   : "All"}
               </p>
-
 
               <p>
                 Graduation Year:{" "}
@@ -289,9 +344,7 @@ function Jobs() {
 
             <button
               className="primary-btn apply-btn"
-
               disabled={job.status !== "Open"}
-
               onClick={() =>
                 handleApply(job._id)
               }

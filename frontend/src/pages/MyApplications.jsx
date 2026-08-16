@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "../App.css";
 
-function MyApplications() {
+function MyApplications({ onBack }) {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -39,6 +39,7 @@ function MyApplications() {
       }
 
       setApplications(data);
+
     } catch (error) {
       console.error("Applications error:", error);
       setError("Unable to connect to server.");
@@ -46,6 +47,7 @@ function MyApplications() {
 
     setLoading(false);
   };
+
 
   // ================= LOADING =================
 
@@ -57,6 +59,7 @@ function MyApplications() {
     );
   }
 
+
   // ================= PAGE =================
 
   return (
@@ -64,7 +67,20 @@ function MyApplications() {
 
       <div className="applications-header">
 
-        <h1>My Applications</h1>
+        <button
+          className="secondary-btn"
+          onClick={onBack}
+          style={{
+            marginBottom: "20px",
+          }}
+        >
+          ← Back to Dashboard
+        </button>
+
+
+        <h1>
+          My Applications
+        </h1>
 
         <p>
           Track the status of your job applications.
@@ -73,7 +89,7 @@ function MyApplications() {
       </div>
 
 
-      {/* ERROR */}
+      {/* ================= ERROR ================= */}
 
       {error && (
         <div className="login-error">
@@ -82,12 +98,14 @@ function MyApplications() {
       )}
 
 
-      {/* NO APPLICATIONS */}
+      {/* ================= NO APPLICATIONS ================= */}
 
       {!error && applications.length === 0 && (
         <div className="no-applications">
 
-          <h2>No Applications Yet</h2>
+          <h2>
+            No Applications Yet
+          </h2>
 
           <p>
             You have not applied for any jobs yet.
@@ -97,7 +115,7 @@ function MyApplications() {
       )}
 
 
-      {/* APPLICATIONS */}
+      {/* ================= APPLICATIONS ================= */}
 
       <div className="applications-list">
 
