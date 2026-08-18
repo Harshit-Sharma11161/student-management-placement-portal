@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Jobs from "./Jobs";
+import Jobs from "./jobs";
 import MyApplications from "./MyApplications";
 import StudentProfile from "./StudentProfile";
 import "../App.css";
