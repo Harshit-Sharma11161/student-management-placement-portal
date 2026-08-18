@@ -17,7 +17,7 @@ function MyApplications({ onBack }) {
       const token = localStorage.getItem("token");
 
       const response = await fetch(
-        "http://localhost:5000/api/applications/my",
+        `${import.meta.env.VITE_API_URL}/api/applications/my`,
         {
           method: "GET",
           headers: {

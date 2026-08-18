@@ -19,7 +19,7 @@ function AdminDashboard() {
       const token = localStorage.getItem("token");
 
       const response = await fetch(
-        "http://localhost:5000/api/applications",
+        `${import.meta.env.VITE_API_URL}/api/applications`,
         {
           method: "GET",
           headers: {
@@ -57,7 +57,7 @@ function AdminDashboard() {
       const token = localStorage.getItem("token");
 
       const response = await fetch(
-        `http://localhost:5000/api/applications/${applicationId}`,
+        `${import.meta.env.VITE_API_URL}/api/applications/${applicationId}`,
         {
           method: "PUT",
 

@@ -33,7 +33,7 @@ function AdminJobs() {
       const token = localStorage.getItem("token");
 
       const response = await fetch(
-        "http://localhost:5000/api/jobs",
+        `${import.meta.env.VITE_API_URL}/api/jobs`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -109,42 +109,41 @@ function AdminJobs() {
 
         eligibility: {
           minCGPA: Number(formData.minCGPA),
+
           branches: formData.branches
             .split(",")
             .map((branch) => branch.trim())
             .filter(Boolean),
-          graduationYear: Number(
-            formData.graduationYear
-          ),
+
+          graduationYear: Number(formData.graduationYear),
         },
 
         deadline: formData.deadline,
       };
 
-      let url = "http://localhost:5000/api/jobs";
+      let url = `${import.meta.env.VITE_API_URL}/api/jobs`;
       let method = "POST";
 
       if (editingJob) {
-        url = `http://localhost:5000/api/jobs/${editingJob._id}`;
+        url = `${import.meta.env.VITE_API_URL}/api/jobs/${editingJob._id}`;
         method = "PUT";
       }
 
       const response = await fetch(url, {
         method,
+
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
+
         body: JSON.stringify(jobData),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        alert(
-          data.message ||
-            "Unable to save job."
-        );
+        alert(data.message || "Unable to save job.");
         return;
       }
 
@@ -156,7 +155,6 @@ function AdminJobs() {
 
       resetForm();
       fetchJobs();
-
     } catch (error) {
       console.error("Save job error:", error);
       alert("Unable to connect to server.");
@@ -207,7 +205,7 @@ function AdminJobs() {
           : "Open";
 
       const response = await fetch(
-        `http://localhost:5000/api/jobs/${job._id}`,
+        `${import.meta.env.VITE_API_URL}/api/jobs/${job._id}`,
         {
           method: "PUT",
 
@@ -233,7 +231,6 @@ function AdminJobs() {
       }
 
       fetchJobs();
-
     } catch (error) {
       console.error(
         "Status update error:",
@@ -259,7 +256,7 @@ function AdminJobs() {
       const token = localStorage.getItem("token");
 
       const response = await fetch(
-        `http://localhost:5000/api/jobs/${jobId}`,
+        `${import.meta.env.VITE_API_URL}/api/jobs/${jobId}`,
         {
           method: "DELETE",
 
@@ -282,7 +279,6 @@ function AdminJobs() {
       alert("Job deleted successfully!");
 
       fetchJobs();
-
     } catch (error) {
       console.error(
         "Delete job error:",
@@ -331,13 +327,11 @@ function AdminJobs() {
 
       </div>
 
-
       {error && (
         <div className="login-error">
           {error}
         </div>
       )}
-
 
       {/* ================= FORM ================= */}
 
@@ -350,7 +344,6 @@ function AdminJobs() {
               ? "Edit Job"
               : "Create New Job"}
           </h2>
-
 
           <form onSubmit={handleSubmit}>
 
@@ -372,7 +365,6 @@ function AdminJobs() {
 
               </div>
 
-
               <div className="form-group">
 
                 <label>
@@ -389,7 +381,6 @@ function AdminJobs() {
 
               </div>
 
-
               <div className="form-group">
 
                 <label>
@@ -405,7 +396,6 @@ function AdminJobs() {
                 />
 
               </div>
-
 
               <div className="form-group">
 
@@ -424,7 +414,6 @@ function AdminJobs() {
 
               </div>
 
-
               <div className="form-group">
 
                 <label>
@@ -442,7 +431,6 @@ function AdminJobs() {
                 />
 
               </div>
-
 
               <div className="form-group">
 
@@ -463,7 +451,6 @@ function AdminJobs() {
 
               </div>
 
-
               <div className="form-group">
 
                 <label>
@@ -479,7 +466,6 @@ function AdminJobs() {
                 />
 
               </div>
-
 
               <div className="form-group">
 
@@ -499,7 +485,6 @@ function AdminJobs() {
 
             </div>
 
-
             <div className="form-group">
 
               <label>
@@ -516,7 +501,6 @@ function AdminJobs() {
               />
 
             </div>
-
 
             <div className="form-group">
 
@@ -539,7 +523,6 @@ function AdminJobs() {
               </small>
 
             </div>
-
 
             <div className="form-buttons">
 
@@ -568,7 +551,6 @@ function AdminJobs() {
 
       )}
 
-
       {/* ================= JOB LIST ================= */}
 
       <div className="admin-jobs-list">
@@ -576,7 +558,6 @@ function AdminJobs() {
         <h2>
           All Jobs
         </h2>
-
 
         {jobs.length === 0 ? (
 
@@ -626,7 +607,6 @@ function AdminJobs() {
 
                 </div>
 
-
                 <span
                   className={
                     job.status === "Open"
@@ -639,7 +619,6 @@ function AdminJobs() {
 
               </div>
 
-
               <div className="admin-job-actions">
 
                 <button
@@ -651,7 +630,6 @@ function AdminJobs() {
                   Edit
                 </button>
 
-
                 <button
                   className="secondary-btn"
                   onClick={() =>
@@ -662,7 +640,6 @@ function AdminJobs() {
                     ? "Close Job"
                     : "Open Job"}
                 </button>
-
 
                 <button
                   className="danger-btn"

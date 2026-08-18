@@ -24,7 +24,7 @@ connectDB();
 
 app.use(
     cors({
-        origin: "http://localhost:5173"
+        origin: process.env.FRONTEND_URL || "http://localhost:5173"
     })
 );
 
@@ -52,5 +52,5 @@ app.get("/", (req, res) => {
 // ================= SERVER =================
 
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });

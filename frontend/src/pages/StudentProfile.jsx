@@ -34,7 +34,7 @@ function StudentProfile({ onBack }) {
       const token = localStorage.getItem("token");
 
       const response = await fetch(
-        "http://localhost:5000/api/students/me",
+       `${import.meta.env.VITE_API_URL}/api/students/me`,
         {
           method: "GET",
           headers: {
@@ -140,7 +140,7 @@ function StudentProfile({ onBack }) {
 
 
       const response = await fetch(
-        "http://localhost:5000/api/students/me",
+        `${import.meta.env.VITE_API_URL}/api/students/me`,
         {
           method: "PUT",
 

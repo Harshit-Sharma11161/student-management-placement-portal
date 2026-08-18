@@ -17,7 +17,7 @@ function Jobs({ onBack }) {
       const token = localStorage.getItem("token");
 
       const response = await fetch(
-        "http://localhost:5000/api/jobs",
+        `${import.meta.env.VITE_API_URL}/api/jobs`,
         {
           method: "GET",
           headers: {
@@ -54,7 +54,7 @@ function Jobs({ onBack }) {
       const token = localStorage.getItem("token");
 
       const response = await fetch(
-        "http://localhost:5000/api/applications",
+        `${import.meta.env.VITE_API_URL}/api/applications`,
         {
           method: "POST",
 
